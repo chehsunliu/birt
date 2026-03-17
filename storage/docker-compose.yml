@@ -1,0 +1,30 @@
+services:
+  postgres:
+    image: postgres:18.3-alpine
+    restart: always
+    ports:
+      - "127.0.0.1:5432:5432"
+    environment:
+      POSTGRES_DB: dlh-db
+      POSTGRES_USER: dlh-admin
+      POSTGRES_PASSWORD: "dlh-admin"
+    command:
+      - "-c"
+      - "log_statement=all"
+
+  postgres-init:
+    image: flyway/flyway:12-alpine
+    depends_on:
+      - postgres
+    restart: on-failure
+    volumes:
+      - type: bind
+        source: ./postgres/sql
+        target: /flyway/sql
+    command:
+      - "-url=jdbc:postgresql://postgres:5432/dlh-db"
+      - "-user=dlh-admin"
+      - "-password=dlh-admin"
+      - "-locations=filesystem:/flyway/sql"
+      - "-connectRetries=15"
+      - "migrate"

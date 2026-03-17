@@ -1,0 +1,48 @@
+[project]
+name = "birt-worker"
+version = "0.1.0"
+description = "Birt worker service"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "birt-shared",
+]
+
+[tool.uv.sources]
+birt-shared = { workspace = true }
+birt-testkit = { workspace = true }
+
+[tool.uv.workspace]
+members = [
+    "../../packages/birt-shared",
+    "../../packages/birt-testkit",
+]
+
+[dependency-groups]
+dev = [
+    "birt-testkit",
+    "mypy>=1.19.0",
+    "pytest>=9.0.1",
+    "pytest-asyncio>=1.3.0",
+    "pytest-mock>=3.15.1",
+    "ruff>=0.14.7",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/birt_worker"]
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "B"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["birt_*"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
