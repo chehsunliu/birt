@@ -1,4 +1,4 @@
-# Birt
+# BIRT
 
 ## Project Structure
 
