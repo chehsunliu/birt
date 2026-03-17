@@ -12,5 +12,5 @@ def test_health(client: httpx.Client, server_daemon: Popen[str]):
     assert r.json() == {"data": {"status": "ok"}}
 
     logs = read_all_json_logs(server_daemon.stdout)
-    assert len(logs) == 1
-    assert "x_request_id" in logs[0]
+    assert len(logs) == 2
+    assert "x_request_id" in logs[-1]
